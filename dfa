@@ -1,0 +1,49 @@
+/* dfa */
+/* Anass Mountasser */
+
+
+
+
+NORMAL (accept) <-- the start state
+  '/':   MAYBE_COMMENT
+  '\" :  STRING
+  '\'':  CHARACTER
+  '\n':  NORMAL
+  other: NORMAL
+   
+MAYBE_COMMENT (accept)
+  '*':    COMMENT
+  '/':   MAYBE_COMMENT
+  '\n':  NORMAL
+  '\" :  STRING
+  '\'':  CHARACTER
+  other: NORMAL
+   
+COMMENT (reject)
+  '*':   MAYBE_NORMAL
+  '\n':  COMMENT
+  other: COMMENT
+
+MAYBE_NORMAL (reject)
+  '/':   NORMAL
+  '*':   MAYBE_NORMAL
+  '\n':  COMMENT
+  other: COMMENT
+
+STRING (accept)
+  '\"'   NORMAL
+  '\n':  STRING
+  '\\':  ESCAPE_STR
+  other: STRING
+
+CHARACTER (accept)
+  '\''   NORMAL
+  '\n':  CHARACTER
+  '\\':  ESCAPE_CHAR
+  other: CHARACTER
+
+ESCAPE_STR (accept)
+  other: STRING
+
+ESCAPE_CHAR (accept)
+  other: CHARACTER
